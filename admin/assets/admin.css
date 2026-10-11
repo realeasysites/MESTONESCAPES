@@ -108,3 +108,6 @@ a { color: var(--gold-deep); }
 .chip-i.good { background: #e3edd6; color: #3c5a24; }
 @media (max-width: 960px) { .stats.five { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 520px) { .stats.five { grid-template-columns: repeat(2, 1fr); } }
+
+.tb-logo { height: 38px; width: auto; }
+.login-logo { height: 96px; width: auto; margin: 0 auto 18px; display: block; }
