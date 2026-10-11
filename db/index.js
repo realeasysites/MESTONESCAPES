@@ -7,10 +7,24 @@ const Database = require('better-sqlite3');
 // Render's persistent disk is mounted at /var/data. Anything outside it is wiped on every deploy,
 // so use the disk automatically when it exists (DB_PATH in the environment still wins).
 const DISK = '/var/data';
-const DB_PATH = process.env.DB_PATH || (fs.existsSync(DISK) ? path.join(DISK, 'mainestonescapes.sqlite') : path.join(__dirname, 'mainestonescapes.sqlite'));
-fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+const LOCAL = path.join(__dirname, 'mainestonescapes.sqlite');
+
+function writableDir(dir) {
+  try { fs.mkdirSync(dir, { recursive: true }); fs.accessSync(dir, fs.constants.W_OK); return true; }
+  catch (e) { return false; }
+}
+
+let DB_PATH = process.env.DB_PATH || (fs.existsSync(DISK) ? path.join(DISK, 'mainestonescapes.sqlite') : LOCAL);
+if (!writableDir(path.dirname(DB_PATH))) {
+  // Usually means DB_PATH points at /var/data but no Render disk is attached yet.
+  // Keep the site up rather than crash, and say so loudly in the logs.
+  console.warn(`[db] WARNING: can't write to ${path.dirname(DB_PATH)} (no disk attached there?). ` +
+    `Falling back to ${LOCAL}. Leads and applications will be WIPED on every deploy until a disk is mounted at ${DISK}.`);
+  DB_PATH = LOCAL;
+}
+const PERSISTENT = DB_PATH.startsWith(DISK);
 const db = new Database(DB_PATH);
-console.log(`[db] SQLite at ${DB_PATH}${DB_PATH.startsWith(DISK) ? ' (persistent disk)' : ' (NOT persistent: wiped on each deploy)'}`);
+console.log(`[db] SQLite at ${DB_PATH}${PERSISTENT ? ' (persistent disk)' : ' (NOT persistent: wiped on each deploy)'}`);
 db.pragma('journal_mode = WAL');
 db.pragma('foreign_keys = ON');
 
@@ -101,4 +115,4 @@ const stmts = {
   purgeSessions: db.prepare(`DELETE FROM sessions WHERE expires_at <= ?`)
 };
 
-module.exports = { db, stmts, STATUSES, APP_STATUSES };
+module.exports = { db, stmts, STATUSES, APP_STATUSES, DB_PATH, PERSISTENT };

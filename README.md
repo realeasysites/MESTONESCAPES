@@ -19,7 +19,7 @@ Old Squarespace URLs (`/residentialstonework`, `/aboutus`, `/workwithus`…) 301
 ## Render setup
 
 1. New **Web Service** from the GitHub repo. Build: `npm install` · Start: `npm start` (Node 20 is pinned).
-2. **Disks** → add 1 GB at `/var/data` (needs a paid instance). Without it, inquiries and applications are wiped on every deploy.
+2. **Disks** → add 1 GB at `/var/data` (needs a paid instance). Without it, inquiries and applications are wiped on every deploy. If the disk isn't attached yet, the site still starts but logs a `[db] WARNING` and `/healthz` shows `"persistentStorage": false`.
 3. **Environment** (see `.env.example`):
    - `NODE_ENV=production`
    - `ADMIN_PASSWORD` — set yourself, 8+ characters

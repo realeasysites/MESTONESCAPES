@@ -4,7 +4,7 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 
-const { db } = require('./db');
+const { db, PERSISTENT } = require('./db');
 const { requireAdmin, isAuthed } = require('./lib/auth');
 const apiRoutes = require('./routes/api');
 const adminRoutes = require('./routes/admin');
@@ -24,7 +24,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/healthz', (req, res) => res.json({ ok: true }));
+// persistentStorage:false means leads are being saved somewhere that gets wiped on deploy (no disk attached).
+app.get('/healthz', (req, res) => res.json({ ok: true, persistentStorage: PERSISTENT }));
 
 // Old Squarespace URLs → new pages, so Google results and saved links keep working.
 const REDIRECTS = {
