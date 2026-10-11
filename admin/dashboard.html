@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Dashboard · Maine Stone Scapes</title>
+  <link rel="icon" href="/img/favicon.png" type="image/png">
+  <link rel="stylesheet" href="/admin/assets/admin.css?v=1">
+  <link rel="stylesheet" href="/sa/admin/panel.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="tb-brand"><span class="tb-mark" aria-hidden="true">MSS</span> <span>Maine Stone Scapes</span> <em>Dashboard</em></div>
+    <div class="tb-actions">
+      <a href="/" target="_blank" rel="noopener">View site</a>
+      <a id="csvLink" href="/api/admin/leads.csv">Export CSV</a>
+      <button id="logout" type="button">Sign out</button>
+    </div>
+  </header>
+
+  <main class="dash">
+    <section id="site-analytics" aria-label="Website traffic"></section>
+
+    <nav class="tabs" role="tablist" aria-label="Lists">
+      <button class="tab is-on" role="tab" aria-selected="true" data-tab="inquiries">Project inquiries <b id="cnt-inquiries" class="tab-n"></b></button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="applications">Job applications <b id="cnt-applications" class="tab-n"></b></button>
+    </nav>
+
+    <section class="stats" id="stats" aria-label="Status counts"></section>
+
+    <section class="panel" aria-labelledby="listTitle">
+      <div class="panel-head">
+        <h2 id="listTitle">Project inquiries</h2>
+        <div class="filters">
+          <input id="search" type="search" placeholder="Search name, phone, town…" aria-label="Search">
+          <select id="statusFilter" aria-label="Filter by status"><option value="">All statuses</option></select>
+        </div>
+      </div>
+      <div id="list" class="lead-list"><p class="empty">Loading…</p></div>
+    </section>
+  </main>
+
+  <script src="/admin/assets/admin.js?v=1"></script>
+  <script src="/sa/admin/panel.js"></script>
+</body>
+</html>
